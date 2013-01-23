@@ -53,7 +53,7 @@ module Refinery
         end
       end
 
-      describe "by_month" do
+      describe "by_archive" do
         before do
           @post1 = FactoryGirl.create(:blog_post, :published_at => Date.new(2011, 3, 11))
           @post2 = FactoryGirl.create(:blog_post, :published_at => Date.new(2011, 3, 12))
@@ -65,22 +65,22 @@ module Refinery
         it "returns all posts from specified month" do
           #check for this month
           date = "03/2011"
-          described_class.by_month(Time.parse(date)).count.should be == 2
-          described_class.by_month(Time.parse(date)).should == [@post2, @post1]
+          described_class.by_archive(Time.parse(date)).count.should be == 2
+          described_class.by_archive(Time.parse(date)).should == [@post2, @post1]
         end
       end
 
       describe ".published_dates_older_than" do
         before do
-          @post1 = FactoryGirl.create(:blog_post, :published_at => Time.utc(2012, 05, 01, 15, 20))
-          @post2 = FactoryGirl.create(:blog_post, :published_at => Time.utc(2012, 05, 01, 15, 30))
+          @post1 = FactoryGirl.create(:blog_post, :published_at => Time.now - 2.months)
+          @post2 = FactoryGirl.create(:blog_post, :published_at => Time.now - 1.month)
           FactoryGirl.create(:blog_post, :published_at => Time.now)
         end
 
         it "returns all published dates older than the argument" do
           expected = [@post2.published_at, @post1.published_at]
 
-          described_class.published_dates_older_than(5.minutes.ago).should eq(expected)
+          described_class.published_dates_older_than(1.day.ago).should eq(expected)
         end
       end
 
@@ -128,7 +128,7 @@ module Refinery
 
       describe "#next" do
         before do
-          FactoryGirl.create(:blog_post, :published_at => Time.now.advance(:days => -1))
+          FactoryGirl.create(:blog_post, :published_at => Time.now.advance(:minutes => -1))
           @post = FactoryGirl.create(:blog_post)
         end
 
@@ -140,7 +140,7 @@ module Refinery
       describe "#prev" do
         before do
           FactoryGirl.create(:blog_post)
-          @post = FactoryGirl.create(:blog_post, :published_at => Time.now.advance(:days => -1))
+          @post = FactoryGirl.create(:blog_post, :published_at => Time.now.advance(:minutes => -1))
         end
 
         it "returns previous article when called on current article" do
@@ -197,7 +197,7 @@ module Refinery
           end
         end
       end
-
+      
       describe "source url" do
         it "should allow a source url and title" do
           p = FactoryGirl.create(:blog_post, :source_url => 'google.com', :source_url_title => 'author')
@@ -206,15 +206,13 @@ module Refinery
           p.source_url_title.should include('author')
         end
       end
-
+      
       describe ".validate_source_url?" do
         context "with Refinery::Blog.validate_source_url set to true" do
           before do
             Refinery::Blog.validate_source_url = true
-          end
+          end  
           it "should have canonical url" do
-            UrlValidator.any_instance.should_receive(:resolve_redirects_verify_url).
-                                      and_return('http://www.google.com')
             p = FactoryGirl.create(:blog_post, :source_url => 'google.com', :source_url_title => 'google')
             p.source_url.should include('www')
           end
@@ -229,7 +227,7 @@ module Refinery
           end
         end
       end
-
+      
     end
   end
 end

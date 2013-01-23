@@ -10,18 +10,18 @@ module Refinery
 
       def index
         # Rss feeders are greedy. Let's give them every blog post instead of paginating.
-        (@posts = Post.live.includes(:comments, :categories)) if request.format.rss?
+        (@posts = Post.live.includes(:comments, :categories).all) if request.format.rss?
         respond_with (@posts) do |format|
           format.html
-          format.rss { render :layout => false }
+          format.rss
         end
       end
 
       def show
         @comment = Comment.new
 
-        @canonical = refinery.url_for(:locale => Refinery::I18n.current_frontend_locale) if canonical?
-
+        @canonical = url_for(:locale => ::Refinery::I18n.default_frontend_locale) if canonical?
+        
         @post.increment!(:access_count, 1)
 
         respond_with (@post) do |format|
@@ -49,7 +49,7 @@ module Refinery
                                       :anchor => "comment-#{@comment.to_param}")
           end
         else
-          render :show
+          render :action => 'show'
         end
       end
 
@@ -58,7 +58,7 @@ module Refinery
           date = "#{params[:month]}/#{params[:year]}"
           @archive_date = Time.parse(date)
           @date_title = @archive_date.strftime('%B %Y')
-          @posts = Post.live.by_month(@archive_date).page(params[:page])
+          @posts = Post.live.by_archive(@archive_date).page(params[:page])
         else
           date = "01/#{params[:year]}"
           @archive_date = Time.parse(date)
@@ -71,12 +71,11 @@ module Refinery
       def tagged
         @tag = ActsAsTaggableOn::Tag.find(params[:tag_id])
         @tag_name = @tag.name
-        @posts = Post.live.tagged_with(@tag_name).page(params[:page])
+        @posts = Post.tagged_with(@tag_name).page(params[:page])
       end
 
-    protected
       def canonical?
-        Refinery::I18n.default_frontend_locale != Refinery::I18n.current_frontend_locale
+        ::Refinery.i18n_enabled? && ::Refinery::I18n.default_frontend_locale != ::Refinery::I18n.current_frontend_locale
       end
     end
   end

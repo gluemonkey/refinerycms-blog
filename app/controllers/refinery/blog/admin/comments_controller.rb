@@ -10,35 +10,35 @@ module Refinery
         def index
           @comments = Refinery::Blog::Comment.unmoderated.page(params[:page])
 
-          render :index
+          render :action => 'index'
         end
 
         def approved
-          @comments = Refinery::Blog::Comment.approved.page(params[:page])
+          unless params[:id].present?
+            @comments = Refinery::Blog::Comment.approved.page(params[:page])
 
-          render :index
-        end
+            render :action => 'index'
+          else
+            @comment = Refinery::Blog::Comment.find(params[:id])
+            @comment.approve!
+            flash[:notice] = t('approved', :scope => 'refinery.blog.admin.comments', :author => @comment.name)
 
-        def approve
-          @comment = Refinery::Blog::Comment.find(params[:id])
-          @comment.approve!
-          flash[:notice] = t('approved', :scope => 'refinery.blog.admin.comments', :author => @comment.name)
-
-          redirect_to refinery.blog_admin_comments_path
+            redirect_to refinery.url_for(:action => params[:return_to] || 'index', :id => nil)
+          end
         end
 
         def rejected
-          @comments = Refinery::Blog::Comment.rejected.page(params[:page])
+          unless params[:id].present?
+            @comments = Refinery::Blog::Comment.rejected.page(params[:page])
 
-          render :index
-        end
+            render :action => 'index'
+          else
+            @comment = Refinery::Blog::Comment.find(params[:id])
+            @comment.reject!
+            flash[:notice] = t('rejected', :scope => 'refinery.blog.admin.comments', :author => @comment.name)
 
-        def reject
-          @comment = Refinery::Blog::Comment.find(params[:id])
-          @comment.reject!
-          flash[:notice] = t('rejected', :scope => 'refinery.blog.admin.comments', :author => @comment.name)
-
-          redirect_to refinery.blog_admin_comments_path
+            redirect_to refinery.url_for(:action => params[:return_to] || 'index', :id => nil)
+          end
         end
 
       end

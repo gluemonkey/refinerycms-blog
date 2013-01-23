@@ -1,6 +1,6 @@
-<% content_for :title, "#{t('.posts_tagged')} “#{h(@tag_name.titleize)}”".html_safe  %>
+<% content_for :title, "#{t('.posts_tagged')} '#{@tag_name.titleize}'"  %>
 
-<% content_for :body_content_title, "#{t('.posts_tagged')} &#8220;#{h(@tag_name.titleize)}&#8221;".html_safe -%>
+<% content_for :body_content_title, "#{t('.posts_tagged')} &#8220;#{@tag_name.titleize}&#8221;".html_safe -%>
 
 <% content_for :body do %>
   <% if @posts.any? %>
@@ -13,7 +13,7 @@
   <% end %>
 <% end %>
 
-<%= render '/refinery/blog/shared/body_content_right' %>
+<%= render :partial => '/refinery/blog/shared/body_content_right' %>
 
-<%= render "/refinery/content_page" %>
+<%= render :partial => "/refinery/content_page" %>
 <% content_for :stylesheets, stylesheet_link_tag('refinery/blog/frontend') %>

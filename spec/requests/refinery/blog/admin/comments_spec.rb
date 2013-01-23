@@ -4,8 +4,8 @@ module Refinery
   module Blog
     module Admin
       describe Comment do
-        refinery_login_with :refinery_user
-        
+        login_refinery_user
+
         describe "#index" do
           context "when has no new unapproved comments" do
             before(:each) do

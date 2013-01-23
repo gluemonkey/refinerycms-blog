@@ -11,12 +11,10 @@
     <%= link_to refinery_icon_tag('zoom.png'), refinery.blog_admin_comment_path(comment),
                 :title => t('.read') %>
     <%= link_to refinery_icon_tag("cross.png"),
-                refinery.reject_blog_admin_comment_path(comment),
-                :method => :post,
+                refinery.rejected_blog_admin_comment_path(comment, :return_to => request.path.split('/').last.gsub(/^comments$/, 'index')),
                 :title => t('.reject') unless comment.rejected? %>
     <%= link_to refinery_icon_tag("tick.png"),
-                refinery.approve_blog_admin_comment_path(comment),
-                :method => :post,
+                refinery.approved_blog_admin_comment_path(comment, :return_to => request.path.split('/').last.gsub(/^comments$/, 'index')),
                 :title => t('.approve') unless comment.approved? %>
   </span>
 </li>

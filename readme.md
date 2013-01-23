@@ -11,7 +11,7 @@ Options:
 
 ## Requirements
 
-Refinery CMS version 2.0.1 or above.
+Refinery CMS version 2.0.0 or above.
 
 ## Install
 
@@ -52,9 +52,3 @@ Run the test suite with [Guard](https://github.com/guard/guard)
 Or just with rake spec
 
     $ bundle exec rake spec
-
-## More Information
-* Check out our [Website](http://refinerycms.com/)
-* Documentation is available in the [guides](http://refinerycms.com/guides)
-* Questions can be asked on our [Google Group](http://group.refinerycms.org)
-* Questions can also be asked in our IRC room, [#refinerycms on freenode](irc://irc.freenode.net/refinerycms)

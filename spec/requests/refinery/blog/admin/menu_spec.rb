@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe "Blog menu entry" do
-  refinery_login_with :refinery_user
-  
+  login_refinery_user
+
   it "is highlighted when managing the blog" do
     visit refinery.admin_root_path
 

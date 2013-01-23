@@ -11,10 +11,10 @@
   <% end %>
 <% end %>
 
-<% content_for :side_body_prepend do -%>
+<% content_for :body_content_right_prepend do -%>
   <%= raw @page.content_for(Refinery::Pages.default_parts.second.to_sym) %>
 <% end if Refinery::Pages.default_parts.many? -%>
-<%= render '/refinery/blog/shared/body_content_right' %>
+<%= render :partial => '/refinery/blog/shared/body_content_right' %>
 
-<%= render "/refinery/content_page" %>
+<%= render :partial => "/refinery/content_page" %>
 <% content_for :stylesheets, stylesheet_link_tag('refinery/blog/frontend') %>

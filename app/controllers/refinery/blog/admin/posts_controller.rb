@@ -4,8 +4,7 @@ module Refinery
       class PostsController < ::Refinery::AdminController
 
         crudify :'refinery/blog/post',
-                :order => 'published_at DESC',
-                :include => [:translations]
+                :order => 'published_at DESC'
 
         before_filter :find_all_categories,
                       :only => [:new, :edit, :create, :update]
@@ -56,7 +55,7 @@ module Refinery
                 unless request.xhr?
                   redirect_to :back
                 else
-                  render "/shared/message"
+                  render :partial => "/shared/message"
                 end
               end
             else
@@ -64,7 +63,7 @@ module Refinery
             end
           else
             unless request.xhr?
-              render :new
+              render :action => 'new'
             else
               render :partial => "/refinery/admin/error_messages",
                      :locals => {
@@ -76,10 +75,6 @@ module Refinery
         end
 
       protected
-        def find_post
-          @post = Refinery::Blog::Post.find_by_slug_or_id(params[:id])
-        end
-
         def find_all_categories
           @categories = Refinery::Blog::Category.find(:all)
         end

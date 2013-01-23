@@ -5,7 +5,6 @@ FactoryGirl.define do
     draft false
     tag_list "chicago, shopping, fun times"
     published_at Time.now
-    author { Factory(:refinery_user) }
     
     factory :blog_post_draft do
       draft true

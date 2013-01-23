@@ -1,7 +1,10 @@
 <nav id='actions' class='multilist'>
   <ul class='search_list'>
     <li class='not_a_link'>
-      <%= render "/refinery/admin/search", :url => refinery.blog_admin_posts_path %>
+      <%= render :partial => "/refinery/admin/search",
+                 :locals => {
+                   :url => refinery.blog_admin_posts_path
+                 } %>
     </li>
   </ul>
 
